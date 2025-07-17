@@ -2,12 +2,14 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import CurrentDay from './CurrentDay.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <CurrentDay />
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
         <input type="checkbox" className="theme-controller" value="light" />
