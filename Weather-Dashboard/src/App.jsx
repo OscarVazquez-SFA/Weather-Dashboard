@@ -3,13 +3,61 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import CurrentDay from './CurrentDay.jsx'
+import FutureDays from './FutureDays.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  //const [count, setCount] = useState(0)
+  const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const date = new Date();
+  const day = weekday[date.getDay()];
   return (
     <>
-      <CurrentDay />
+      <CurrentDay
+        targetDay={day}
+      /*
+      temp
+      humidityPercentage
+      windSpeed
+      weatherIcon
+      *//>
+      <FutureDays
+        weekday={weekday}
+        date={date}
+        targetDay={day}
+      />
+
+
+
+      <label className="toggle text-base-content">
+        <input type="checkbox" />
+        <svg aria-label="enabled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <g
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            strokeWidth="4"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M20 6 9 17l-5-5"></path>
+          </g>
+        </svg>
+        <svg
+          aria-label="disabled"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </label>
+
+
+
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
         <input type="checkbox" className="theme-controller" value="light" />
