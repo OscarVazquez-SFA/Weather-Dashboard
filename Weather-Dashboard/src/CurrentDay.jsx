@@ -4,7 +4,7 @@ export default function CurrentDay({ targetDay }) {
 
     return (
         <>
-
+            
             <div className="card bg-base-100 image-full w-full shadow-sm flex-1">
                 <label className="toggle text-base-content z-10 m-2">
                     <input type="checkbox" />

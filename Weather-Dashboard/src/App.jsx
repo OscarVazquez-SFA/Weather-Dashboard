@@ -6,18 +6,17 @@ import CurrentDay from './CurrentDay.jsx'
 import FutureDays from './FutureDays.jsx'
 
 function App() {
-  //const [count, setCount] = useState(0)
+
   const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const date = new Date();
   const day = weekday[date.getDay()];
   return (
     <>
-      
-       <CurrentDay
+
+      <CurrentDay
         targetDay={day}
       />
-
-      <label className="swap swap-rotate flex-auto">
+      <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
         <input type="checkbox" className="theme-controller" value="light" />
 
