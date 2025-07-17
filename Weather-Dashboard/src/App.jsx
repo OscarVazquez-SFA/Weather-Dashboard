@@ -6,15 +6,13 @@ import CurrentDay from './CurrentDay.jsx'
 import FutureDays from './FutureDays.jsx'
 
 function App() {
+  const api_key = import.meta.env.VITE_WEATHER_API_KEY
 
-  const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const date = new Date();
-  const day = weekday[date.getDay()];
+  
   return (
     <>
 
       <CurrentDay
-        targetDay={day}
       />
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
@@ -40,9 +38,7 @@ function App() {
       </label>
 
       <FutureDays
-        weekday={weekday}
-        date={date}
-        targetDay={day}
+        
       />
     </>
   )
