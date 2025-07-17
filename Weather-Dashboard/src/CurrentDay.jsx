@@ -12,9 +12,14 @@ export default function CurrentDay({targetDay}) {
                     width="100%"
                     height="50%"/>
             </figure>
-            <div className="card-body">
-                <h2 className="card-title">{targetDay}</h2>
-                <p>temperature, wind speed, humidity percentange along with icon of the current weather (sunny, cloudy, rainy, etc)</p>
+            <div className="card-body justify-center items-center">
+                <h1 className="card-title text-5xl" >{targetDay}</h1>
+                <ul className="justify-center items-center text-2xl font-bold py-2 ">
+                    <li>Temp: 69°F</li>
+                    <li>Humidity: 60%</li>
+                    <li>Wind Speed: 15 km/h</li>
+                    <li>☀️</li>
+                </ul>
             </div>
         </div>
     )
