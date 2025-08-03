@@ -1,18 +1,54 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import CurrentDay from './CurrentDay.jsx'
 import FutureDays from './FutureDays.jsx'
+import SearchForCity from './SearchForCity.jsx'
 
 function App() {
   const api_key = import.meta.env.VITE_WEATHER_API_KEY
-
+  /*
+  since both child components need lat and lon parameters to fetch the weather data, we can define them here in the App component
+  and pass them down as props to the child components.
+  */
   
+  const city = "Dallas"; 
+  
+
+  // make sure to display a loading state while the data is being fetched
+  const [coordinates, setCoordinates] = useState({
+    lat: 0, 
+    lon: 0
+  });
+  // state for search input
+  //const [searchInput, setSearchInput] = useState("");
+
+  // create a state to control the temperature unit (Fahrenheit/Celsius)
+  const [isFahrenheit, setIsFahrenheit] = useState(true);
+
+  //use effect here to fetch the longitude and latitude of a city 
+  useEffect(()=>{
+    // fetch geo data for the city
+    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}}&limit=1&appid=${api_key}`)
+      .then(response => response.json())
+      .then(data => setCoordinates({lat: data[0].lat, lon: data[0].lon}))
+  }, [city])
+
+    
+  // this function will be used to toggle the temperature unit accross both CurrentDay and FutureDays components (child components)
+  function toggleTemp(){
+    setIsFahrenheit(prevTemp =!prevTemp);
+  }
+
   return (
     <>
 
       <CurrentDay
+        isFahrenheit={isFahrenheit}
+        toggleTemp={toggleTemp}
+        coordinates={coordinates}
+        city={city}
       />
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
@@ -37,8 +73,13 @@ function App() {
         </svg>
       </label>
 
+      <SearchForCity
+      />
       <FutureDays
-        
+        isFahrenheit={isFahrenheit}
+        toggleTemp={toggleTemp}
+        coordinates={coordinates}
+        city={city}
       />
     </>
   )

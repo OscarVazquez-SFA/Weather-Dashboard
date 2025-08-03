@@ -1,6 +1,19 @@
-import React from "react";
+import React, { use } from "react";
 
-export default function CurrentDay() {
+export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city }) {
+    // have at least a state that controls whether the current temp is in Fahrenheit or Celsius (handle logic)
+    /* use effect is needed to fetch the weather data from the API (depending on the state of the farenheit/celsius toggle, we 
+    will need to fetch the data in the correct unit).
+    */
+   // use effect to fetch the current weather data from the API
+    // grab the response as json object, then set the state with the appropriate data (temperature, humidity, wind speed, etc.)
+     // dont forget to remove any side effects when the component unmounts
+
+    useEffect(()=>{
+        
+    },[])
+
+    // remove theme controller here in order to make room for the current day card (Farenheit/Celsius toggle will be in the App component)
 
     return (
         <>

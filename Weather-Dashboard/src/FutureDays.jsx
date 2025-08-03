@@ -1,13 +1,29 @@
+
 import React from "react";
 import CurrentDay from "./CurrentDay";
 
 
-export default function FutureDays({ targetDay, date, weekday }) {
+export default function FutureDays({ isFahrenheit, toggleTemp, coordinates, city }) {
     const api_key = import.meta.env.VITE_WEATHER_API_KEY
     const lat = 0;
     const lon = 0;
 
+
     
+        /* discuss with micheci about whether or not to give the farenheit/celsius state to App component and then pass it down as a prop 
+        to the Future Days and Currend Day components. This way we can have a single state that controls the temperature unit across the app.
+        */
+
+        // This function will fetch the weather data from the API
+        // You can use fetch or axios to make the API call
+        // Example: fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}`)
+    
+    /* use effect is needed to fetch the weather data from the API (depending on the state of the farenheit/celsius toggle, we 
+    will need to fetch the data in the correct unit).
+    */
+    
+   // const api_call = `http://api.openweathermap.org/geo/1.0/direct?q=Dallas&limit={limit}&appid=${api_key}`
+
 
     return (
         <nav className="flex justify-center items-center mt-4">
