@@ -26,11 +26,11 @@ function App() {
 
   // create a state to control the temperature unit (Fahrenheit/Celsius)
   const [isFahrenheit, setIsFahrenheit] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(true);
   //use effect here to fetch the longitude and latitude of a city 
   useEffect(()=>{
     // fetch geo data for the city
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}}&limit=1&appid=${api_key}`)
+    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${api_key}`)
       .then(response => response.json())
       .then(data => setCoordinates({lat: data[0].lat, lon: data[0].lon}))
   }, [city])
