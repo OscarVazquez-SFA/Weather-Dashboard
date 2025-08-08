@@ -9,9 +9,7 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
     // grab the response as json object, then set the state with the appropriate data (temperature, humidity, wind speed, etc.)
      // dont forget to remove any side effects when the component unmounts
 
-    useEffect(()=>{
-        
-    },[])
+    
 
     // remove theme controller here in order to make room for the current day card (Farenheit/Celsius toggle will be in the App component)
 
