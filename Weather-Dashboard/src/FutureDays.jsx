@@ -8,7 +8,7 @@ export default function FutureDays({ isFahrenheit, toggleTemp, coordinates, city
     const lat = 0;
     const lon = 0;
 
-
+    // staetes for highs and lows 
     
         /* discuss with micheci about whether or not to give the farenheit/celsius state to App component and then pass it down as a prop 
         to the Future Days and Currend Day components. This way we can have a single state that controls the temperature unit across the app.

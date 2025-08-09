@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import CurrentDay from './CurrentDay.jsx'
 import FutureDays from './FutureDays.jsx'
 import SearchForCity from './SearchForCity.jsx'
+import AppServices from './API services/AppService.jsx'
 
 function App() {
   const api_key = import.meta.env.VITE_WEATHER_API_KEY
@@ -26,16 +27,26 @@ function App() {
 
   // create a state to control the temperature unit (Fahrenheit/Celsius)
   const [isFahrenheit, setIsFahrenheit] = useState(true);
+
+  //state to control the loading state (dont forget to add the loading/skeleton UI thing from daisyUI) 
+  /* this is the loading state that will be used to display a skeleton UI while the data is being fetched
+  <div className="skeleton h-32 w-32"></div>
+  */
   const [isLoading, setIsLoading] = useState(true);
   //use effect here to fetch the longitude and latitude of a city 
-  useEffect(()=>{
-    // fetch geo data for the city
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${api_key}`)
-      .then(response => response.json())
-      .then(data => setCoordinates({lat: data[0].lat, lon: data[0].lon}))
-  }, [city])
-
+  useEffect(() => async () => {
+      //const test = 
+      const test = await AppServices(city, api_key);
+      console.log(test[0].lat, test[0].lon);
+      setCoordinates({ lat: 69, lon: 420});
+      console.log(coordinates);
+    //
+  }, [city]);
     
+  useEffect(() => {
+    console.log("Coordinates updated:", coordinates);
+  }, [coordinates]);
+
   // this function will be used to toggle the temperature unit accross both CurrentDay and FutureDays components (child components)
   function toggleTemp(){
     setIsFahrenheit(prevTemp =!prevTemp);
@@ -49,6 +60,7 @@ function App() {
         toggleTemp={toggleTemp}
         coordinates={coordinates}
         city={city}
+        loading={isLoading}
       />
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
@@ -74,12 +86,14 @@ function App() {
       </label>
 
       <SearchForCity
+        
       />
       <FutureDays
         isFahrenheit={isFahrenheit}
         toggleTemp={toggleTemp}
         coordinates={coordinates}
         city={city}
+        loading={isLoading}
       />
     </>
   )

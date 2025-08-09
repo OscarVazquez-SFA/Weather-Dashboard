@@ -1,13 +1,18 @@
 import React, { use } from "react";
 
 export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city }) {
+      const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // have at least a state that controls whether the current temp is in Fahrenheit or Celsius (handle logic)
     /* use effect is needed to fetch the weather data from the API (depending on the state of the farenheit/celsius toggle, we 
     will need to fetch the data in the correct unit).
     */
    // use effect to fetch the current weather data from the API
+   
+
     // grab the response as json object, then set the state with the appropriate data (temperature, humidity, wind speed, etc.)
-     // dont forget to remove any side effects when the component unmounts
+    // dont forget to remove any side effects when the component unmounts
+
+    // humidity, wind speed 
 
     
 
@@ -58,7 +63,7 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
                 <div className="card-body justify-center items-center">
                     <h1 className="card-title text-5xl" >Current day here</h1>
                     <ul className="justify-center items-center text-2xl font-bold py-2 ">
-                        <li>Temp: 69°F</li>
+                        <li>{}</li>
                         <li>Humidity: 60%</li>
                         <li>Wind Speed: 15 km/h</li>
                         <li>☀️</li>
