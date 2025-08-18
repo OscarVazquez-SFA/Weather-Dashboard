@@ -1,6 +1,7 @@
 import React, { use, useEffect } from "react";
 import CurrentDayServices from "./API services/CurrentDayServices";
 
+
 export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city }) {
       const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // have at least a state that controls whether the current temp is in Fahrenheit or Celsius (handle logic)
@@ -17,8 +18,6 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
 
     useEffect(() => async () => {
         const test = await CurrentDayServices(coordinates.lat,coordinates.lon, api_key, isFahrenheit);
-        console.log(test);
-        
         
     }, [coordinates, isFahrenheit]);
 
