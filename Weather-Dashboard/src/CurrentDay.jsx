@@ -1,4 +1,5 @@
-import React, { use } from "react";
+import React, { use, useEffect } from "react";
+import CurrentDayServices from "./API services/CurrentDayServices";
 
 export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city }) {
       const api_key = import.meta.env.VITE_WEATHER_API_KEY
@@ -14,7 +15,12 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
 
     // humidity, wind speed 
 
-    
+    useEffect(() => async () => {
+        const test = await CurrentDayServices(coordinates.lat,coordinates.lon, api_key, isFahrenheit);
+        console.log(test);
+        
+        
+    }, [coordinates, isFahrenheit]);
 
     // remove theme controller here in order to make room for the current day card (Farenheit/Celsius toggle will be in the App component)
 

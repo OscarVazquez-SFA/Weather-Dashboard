@@ -8,6 +8,7 @@ export default function SearchForCity() {
     // local storage to save the searched city
     // save last city in local storage so that when user wants to see the weather for that city again, it will be available for user 
 
+    
     return(
         <input type="text" placeholder="Type here" className="input"/>
     )
