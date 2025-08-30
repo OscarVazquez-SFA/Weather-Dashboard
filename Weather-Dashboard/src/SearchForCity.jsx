@@ -1,27 +1,65 @@
 import React from "react";
+import CurrentDayServices from "./API services/CurrentDayServices";
+import AppServices from "./API services/AppService.jsx";
 
-export default function SearchForCity({city, setCity}) {
+
+export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading }) {
+    const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // this component will try and handle the search for a valid city
     // will also attempt to fetch the weather data for that city
     // potentially loading state here rather than using the loading state in the App component
 
     // local storage to save the searched city
-        // localStorage.setItem("lastSearchedCity", city);
-        // const lastSearchedCity = localStorage.getItem("lastSearchedCity");
-        // console.log(lastSearchedCity); // will log the last searched city
+    // localStorage.setItem("lastSearchedCity", city);
+    // const lastSearchedCity = localStorage.getItem("lastSearchedCity");
+    // console.log(lastSearchedCity); // will log the last searched city
     // save last city in local storage so that when user wants to see the weather for that city again, it will be available for user 
-    function handleSubmit(event){
+    async function handleSubmit(event) {
         event.preventDefault();
         //console.log(city);
-        console.log("New val: ", city);
+        if (!city) return;
+        
+        const getCoordinates = async () => {
+            try {
+                const dataFromGeocode = await AppServices(city, api_key);
+                console.log(dataFromGeocode[0].lat, dataFromGeocode[0].lon);
+                if (dataFromGeocode.length === 0) {
+                    console.error("No data found for the specified city", city);
+                    setIsLoading(false);
+                    return;
+                }
+                /*
+                setCoordinates({
+                    lat: dataFromGeocode[0].lat,
+                    lon: dataFromGeocode[0].lon
+                });
+                */
+               const obj = {
+                lat: dataFromGeocode[0].lat,
+                lon: dataFromGeocode[0].lon
+               }
+                return obj
+            } catch (error) {
+                console.error(error);
+                setIsLoading(false);
+            }
+        };
+        
+        const test = await getCoordinates();
+        console.log(coordinates);
+        console.log(test);
+        
+        const currentInfo = await CurrentDayServices(test.lat, test.lon, api_key, isFahrenheit);
+        console.log(currentInfo);
+        setIsLoading(false);
     }
-    return(
+    return (
         <>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-            <input onChange={(event)=>{setCity(event.target.value)}} value={city} type="text" placeholder="Type here" className="input"/>
-            <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">Submit</button>
-        </form>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                <input onChange={(event) => { setCity(event.target.value) }} value={city} type="text" placeholder="Type here" className="input" />
+                <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">Submit</button>
+            </form>
         </>
-       
+
     )
 }

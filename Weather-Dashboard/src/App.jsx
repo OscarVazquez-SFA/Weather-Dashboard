@@ -14,6 +14,7 @@ function App() {
   and pass them down as props to the child components.
   */
   
+  // best rule of thumb, keep state as high as possible in the component tree
   
   
   const [city, setCity] = useState("");
@@ -35,17 +36,37 @@ function App() {
   */
   const [isLoading, setIsLoading] = useState(true);
   //use effect here to fetch the longitude and latitude of a city 
-  useEffect(() => async () => {
-      //const test = 
-      const test = await AppServices(city, api_key);
-      //console.log(test[0].lat, test[0].lon);
-      setCoordinates({ lat: test[0].lat, lon: test[0].lon});
-     // console.log(coordinates);
-    //
-  }, [city]);
-    
+
+  /*
+  useEffect(()=>{
+    if(!city) return;
+    const getCoordinates = async () => {
+      try{
+        const dataFromCurrentAPI = await AppServices(city, api_key);
+        if(dataFromCurrentAPI.length === 0){
+          console.error("No data found for the specified city", city);
+          setIsLoading(false);
+          return;
+      }
+      setCoordinates({
+        lat: dataFromCurrentAPI[0].lat,
+        lon: dataFromCurrentAPI[0].lon
+      });
+      setIsLoading(false);
+      }catch(error){
+        console.error(err);
+        setIsLoading(false);
+      }
+  };
+    getCoordinates();
+}, [city]);
+
+*/
+
   useEffect(() => {
-   // console.log("Coordinates updated:", coordinates);
+    //console.log("Coordinates updated:", coordinates);
+    //console.log("City updated:", city);
+    
   }, [coordinates]);
 
   // this function will be used to toggle the temperature unit accross both CurrentDay and FutureDays components (child components)
@@ -89,8 +110,10 @@ function App() {
       <SearchForCity
         city={city}
         setCity={setCity}
-        
-
+        coordinates={coordinates}
+        isFahrenheit={isFahrenheit}
+        setIsLoading={setIsLoading}
+        setCoordinates={setCoordinates}
       />
 
       <FutureDays
