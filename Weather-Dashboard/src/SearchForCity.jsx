@@ -3,7 +3,7 @@ import CurrentDayServices from "./API services/CurrentDayServices";
 import AppServices from "./API services/AppService.jsx";
 
 
-export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading }) {
+export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData }) {
     const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // this component will try and handle the search for a valid city
     // will also attempt to fetch the weather data for that city
@@ -46,18 +46,19 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         };
         
         const test = await getCoordinates();
-        console.log(coordinates);
+       // console.log(coordinates);
         console.log(test);
         
         const currentInfo = await CurrentDayServices(test.lat, test.lon, api_key, isFahrenheit);
-        console.log(currentInfo);
+        setWeatherData(currentInfo);
         setIsLoading(false);
     }
+
     return (
         <>
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                 <input onChange={(event) => { setCity(event.target.value) }} value={city} type="text" placeholder="Type here" className="input" />
-                <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">Submit</button>
+                <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">Submit</button>
             </form>
         </>
 

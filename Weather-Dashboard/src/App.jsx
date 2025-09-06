@@ -12,17 +12,20 @@ function App() {
   /*
   since both child components need lat and lon parameters to fetch the weather data, we can define them here in the App component
   and pass them down as props to the child components.
-  */
+  */  
+    const [weatherData, setWeatherData] = useState({});
+
   
+
   // best rule of thumb, keep state as high as possible in the component tree
-  
+  const [dt, setDt] = useState(0);
   
   const [city, setCity] = useState("");
 
   // make sure to display a loading state while the data is being fetched
   const [coordinates, setCoordinates] = useState({
     lat: 0, 
-    lon: 0
+    lon: 0, 
   });
   // state for search input
   //const [searchInput, setSearchInput] = useState("");
@@ -83,6 +86,9 @@ function App() {
         coordinates={coordinates}
         city={city}
         loading={isLoading}
+        dt={dt}
+        setDt={setDt}
+        weatherData={weatherData}
       />
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
@@ -114,6 +120,9 @@ function App() {
         isFahrenheit={isFahrenheit}
         setIsLoading={setIsLoading}
         setCoordinates={setCoordinates}
+        setWeatherData={setWeatherData}
+        weatherData={weatherData}
+
       />
 
       <FutureDays

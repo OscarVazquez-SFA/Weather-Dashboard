@@ -2,14 +2,15 @@ import React, { use, useEffect } from "react";
 import CurrentDayServices from "./API services/CurrentDayServices";
 
 
-export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city }) {
-      const api_key = import.meta.env.VITE_WEATHER_API_KEY
+export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city, loading, dt, setDt }) {
+    const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // have at least a state that controls whether the current temp is in Fahrenheit or Celsius (handle logic)
     /* use effect is needed to fetch the weather data from the API (depending on the state of the farenheit/celsius toggle, we 
     will need to fetch the data in the correct unit).
     */
-   // use effect to fetch the current weather data from the API
-   
+    // use effect to fetch the current weather data from the API
+
+
 
     // grab the response as json object, then set the state with the appropriate data (temperature, humidity, wind speed, etc.)
     // dont forget to remove any side effects when the component unmounts
@@ -17,11 +18,27 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
     // humidity, wind speed 
 
     useEffect(() => async () => {
-        const test = await CurrentDayServices(coordinates.lat,coordinates.lon, api_key, isFahrenheit);
-        
+        const test = await CurrentDayServices(coordinates.lat, coordinates.lon, api_key, isFahrenheit);
+
     }, [coordinates, isFahrenheit]);
 
     // remove theme controller here in order to make room for the current day card (Farenheit/Celsius toggle will be in the App component)
+    function handleDayOfWeek() {
+        const timestamp = dt; 
+        const date = new Date(timestamp * 1000);
+        const formatted = date.toLocaleString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+        console.log(formatted);
+
+    }
+    //handleDayOfWeek();
+    
 
     return (
         <>
@@ -66,13 +83,16 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
                         height="50%" />
                 </figure>
                 <div className="card-body justify-center items-center">
-                    <h1 className="card-title text-5xl" >Current day here</h1>
-                    <ul className="justify-center items-center text-2xl font-bold py-2 ">
-                        <li>{}</li>
-                        <li>Humidity: 60%</li>
-                        <li>Wind Speed: 15 km/h</li>
-                        <li>☀️</li>
-                    </ul>
+                    {dt ? 
+                    <h1 className="card-title text-5xl">Time of Day: {dt}</h1> : 
+                    <p>Enter a city for weather information please.</p>
+                    }
+                </div>
+                <div className="card-body justify-center items-center">
+                    {dt ? 
+                    <h1 className="card-title text-5xl">Time of Day: {dt}</h1> : 
+                    <p>Enter a city for weather information please.</p>
+                    }
                 </div>
             </div>
         </>
