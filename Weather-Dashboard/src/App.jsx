@@ -13,7 +13,7 @@ function App() {
   since both child components need lat and lon parameters to fetch the weather data, we can define them here in the App component
   and pass them down as props to the child components.
   */  
-    const [weatherData, setWeatherData] = useState({});
+    const [weatherData, setWeatherData] = useState(null);
 
   
 

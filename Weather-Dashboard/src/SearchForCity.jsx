@@ -22,7 +22,7 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         const getCoordinates = async () => {
             try {
                 const dataFromGeocode = await AppServices(city, api_key);
-                console.log(dataFromGeocode[0].lat, dataFromGeocode[0].lon);
+                //console.log(dataFromGeocode[0].lat, dataFromGeocode[0].lon);
                 if (dataFromGeocode.length === 0) {
                     console.error("No data found for the specified city", city);
                     setIsLoading(false);
@@ -47,10 +47,11 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         
         const test = await getCoordinates();
        // console.log(coordinates);
-        console.log(test);
+       // console.log(test);
         
         const currentInfo = await CurrentDayServices(test.lat, test.lon, api_key, isFahrenheit);
         setWeatherData(currentInfo);
+        //console.log(currentInfo);
         setIsLoading(false);
     }
 
