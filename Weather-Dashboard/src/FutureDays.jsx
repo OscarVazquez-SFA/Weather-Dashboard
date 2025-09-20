@@ -1,13 +1,22 @@
 
 import React from "react";
-import CurrentDay from "./CurrentDay";
+import FutureDaysServices from "./API services/FutureDaysServices";
+import { farenheitToCelsius } from "./Helper Functions/helperFunctions.jsx";
+import {handleCheckBoxChange} from "./Helper Functions/helperFunctions.jsx";
+import { useEffect } from "react";
 
 
-export default function FutureDays({ isFahrenheit, toggleTemp, coordinates, city }) {
+
+
+export default function FutureDays({ isFahrenheit, toggleTemp, futureWeatherData, city, coordinates, loading, farenheitType, setFarenheitType }) {
     const api_key = import.meta.env.VITE_WEATHER_API_KEY
     const lat = 0;
     const lon = 0;
 
+   useEffect(() => async () => {
+           const test = await FutureDaysServices(coordinates.lat, coordinates.lon, api_key, isFahrenheit);
+   
+    }, [coordinates, isFahrenheit]);
     // staetes for highs and lows 
     
         /* discuss with micheci about whether or not to give the farenheit/celsius state to App component and then pass it down as a prop 

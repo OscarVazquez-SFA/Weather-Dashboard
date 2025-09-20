@@ -1,9 +1,10 @@
 import React from "react";
 import CurrentDayServices from "./API services/CurrentDayServices";
 import AppServices from "./API services/AppService.jsx";
+import FutureDaysServices from "./API services/FutureDaysServices.jsx";
 
 
-export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData }) {
+export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData, setFutureWeatherData }) {
     const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // this component will try and handle the search for a valid city
     // will also attempt to fetch the weather data for that city
@@ -22,6 +23,7 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         const getCoordinates = async () => {
             try {
                 const dataFromGeocode = await AppServices(city, api_key);
+                
                 //console.log(dataFromGeocode[0].lat, dataFromGeocode[0].lon);
                 if (dataFromGeocode.length === 0) {
                     console.error("No data found for the specified city", city);
@@ -46,10 +48,13 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         };
         
         const test = await getCoordinates();
-       // console.log(coordinates);
+        //console.log(coordinates);
        // console.log(test);
         
         const currentInfo = await CurrentDayServices(test.lat, test.lon, api_key, isFahrenheit);
+        const futureInfo = await FutureDaysServices(test.lat, test.lon, api_key, isFahrenheit);
+        setFutureWeatherData(futureInfo);
+        //console.log("Future Info:", futureInfo);
         setWeatherData(currentInfo);
         //console.log(currentInfo);
         setIsLoading(false);
