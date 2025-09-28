@@ -8,6 +8,6 @@ export function farenheitToCelsius(temp, type) {
     }
 }
 
-export function handleCheckBoxChange(isFarenheit, setIsFahrenheit) {
-        setIsFahrenheit(!isFarenheit);
+export function handleCheckBoxChange(setIsFahrenheit) {
+        setIsFahrenheit(prev => !prev);
 }

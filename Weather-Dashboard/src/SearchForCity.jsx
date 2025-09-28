@@ -54,7 +54,7 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         const currentInfo = await CurrentDayServices(test.lat, test.lon, api_key, isFahrenheit);
         const futureInfo = await FutureDaysServices(test.lat, test.lon, api_key, isFahrenheit);
         setFutureWeatherData(futureInfo);
-        //console.log("Future Info:", futureInfo);
+        console.log("Future Info:", futureInfo);
         setWeatherData(currentInfo);
         //console.log(currentInfo);
         setIsLoading(false);

@@ -32,6 +32,8 @@ export default function FutureDays({ isFahrenheit, toggleTemp, futureWeatherData
     */
     
    // const api_call = `http://api.openweathermap.org/geo/1.0/direct?q=Dallas&limit={limit}&appid=${api_key}`
+    let displayMaxTemp =  isFahrenheit ? farenheitToCelsius(futureWeatherData?.list[0]?.main?.temp_max, 'C') : futureWeatherData?.list[0]?.main?.temp_max.toFixed(0);
+    let displayMinTemp =  isFahrenheit ? farenheitToCelsius(futureWeatherData?.list[0]?.main?.temp_min, 'C') : futureWeatherData?.list[0]?.main?.temp_min.toFixed(0);
 
 
     return (
@@ -41,8 +43,8 @@ export default function FutureDays({ isFahrenheit, toggleTemp, futureWeatherData
                     <h1 className="text-2xl font-bold text-white">Friday</h1>
                     <div className="text-white text-lg font-semibold justify-center items-center">
                         <ul>
-                            <li>H: 85°F</li>
-                            <li>L: 70°F</li>
+                            <li>{displayMaxTemp}</li>
+                            <li>{displayMinTemp}</li>
                         </ul>
                     </div>
                 </div>
