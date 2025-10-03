@@ -43,8 +43,8 @@ export default function FutureDays({ isFahrenheit, toggleTemp, futureWeatherData
                     <h1 className="text-2xl font-bold text-white">Friday</h1>
                     <div className="text-white text-lg font-semibold justify-center items-center">
                         <ul>
-                            <li>{displayMaxTemp}</li>
-                            <li>{displayMinTemp}</li>
+                            <li>High: {displayMaxTemp}° {isFahrenheit ? 'C' : 'F'}</li>
+                            <li>Low: {displayMinTemp}° {isFahrenheit ? 'C' : 'F'}</li>
                         </ul>
                     </div>
                 </div>

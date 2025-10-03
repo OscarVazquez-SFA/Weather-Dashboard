@@ -18,7 +18,7 @@ function App() {
     const [weatherData, setWeatherData] = useState(null);
     const [futureWeatherData, setFutureWeatherData] = useState(null);
     //const [farenheitType, setFarenheitType] = React.useState(false);
-
+    const [isDark, setIsDark] = React.useState(true);
 
   // best rule of thumb, keep state as high as possible in the component tree
   const [dt, setDt] = useState(0);
@@ -75,11 +75,17 @@ function App() {
     
   }, [coordinates]);
 
-  console.log(weatherData)
+  //console.log(weatherData)
+
+  function toggleContrast(event){
+    event.preventDefault();
+    setIsDark(prevIsDark => !prevIsDark);
+  }
+  console.log(isDark);
 
   return (
     <>
-      <label className="flex cursor-pointer gap-2 z-10 justify-end items-center p-4">
+    {/*  <label className="flex cursor-pointer gap-2 z-10 justify-end items-center p-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -94,7 +100,7 @@ function App() {
                         <path
                             d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
                     </svg>
-                    <input type="checkbox" onChange={()=>handleCheckBoxChange(setIsFahrenheit)} value="synthwave" className="toggle theme-controller" />
+                    <input type="checkbox" onChange={()=>handleCheckBoxChange(setIsFahrenheit)}  className="toggle" />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -107,7 +113,8 @@ function App() {
                         strokeLinejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
-                </label>
+        </label>*/}
+
       <CurrentDay
         isFahrenheit={isFahrenheit}
         coordinates={coordinates}
@@ -116,10 +123,11 @@ function App() {
         dt={dt}
         setDt={setDt}
         weatherData={weatherData}
+        isDark={isDark}
       />
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
-        <input type="checkbox" className="theme-controller" value="light" />
+        <input type="checkbox"  onChange={()=>handleCheckBoxChange(setIsFahrenheit, setIsDark)} className="theme-controller" value="light" />
 
         {/* sun icon */}
         <svg

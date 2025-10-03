@@ -2,9 +2,10 @@ import React, { use, useEffect } from "react";
 import CurrentDayServices from "./API services/CurrentDayServices";
 import { farenheitToCelsius } from "./Helper Functions/helperFunctions.jsx";
 import {handleCheckBoxChange} from "./Helper Functions/helperFunctions.jsx";
+import { mphToKph } from "./Helper Functions/helperFunctions.jsx";
 
 
-export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city, loading, dt, setDt, weatherData, farenheitType, setFarenheitType }) {
+export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city, loading, dt, setDt, weatherData, farenheitType, setFarenheitType, isDark}) {
     const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // have at least a state that controls whether the current temp is in Fahrenheit or Celsius (handle logic)
     /* use effect is needed to fetch the weather data from the API (depending on the state of the farenheit/celsius toggle, we 
@@ -44,23 +45,25 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
 
     
     let displayTemp =  isFahrenheit ? farenheitToCelsius(weatherData?.main?.temp, 'C') : weatherData?.main?.temp?.toFixed(0);
+    let displayWindSpeed = isFahrenheit ? mphToKph(weatherData?.wind?.speed, 'KPH') : weatherData?.wind?.speed?.toFixed(0);
+
     //console.log(displayTemp);
     
     return (
         <>
 
-            <div className="card bg-base-100 image-full w-full shadow-sm flex-1">
+            <div className="card bg-base-100 image-full w-full shadow-sm flex-1 ">
                 
 
-
+                {/*  */}
                 <figure>
                     <img
-                        src="https://tenor.com/view/clean-sun-beautiful-heaven-gif-19516158.gif"
+                        src={`https://openweathermap.org/img/wn/${weatherData?.weather?.[0]?.icon}@2x.png`}
                         alt="Shoes"
-                        width="100%"
+                        width="50%"
                         height="50%" />
                 </figure>
-
+                
 
 
 
@@ -68,7 +71,7 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
                     {weatherData ? (
                         <>
                             {weatherData?.dt && (
-                                <h1 className="card-title text-5xl">
+                                <h1 className={`card-title text-5xl ${isDark ? "text-blue-500" : "text-purple-500"}`}>
                                     Time of Day:{" "}
                                     {new Date(weatherData.dt * 1000).toLocaleString("en-US", {
                                         weekday: "long",
@@ -80,17 +83,17 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
                             )}
                             {weatherData?.main?.temp && (
                                 <h1 className="card-title text-5xl">
-                                    Current Temp: {displayTemp}° {farenheitType ? 'C' : 'F'}
+                                    Current Temp: {displayTemp}° {isFahrenheit ? 'C' : 'F'}
                                 </h1>
                             )}
                             {weatherData?.main?.humidity && (
                                 <h1 className="card-title text-5xl">
-                                    Humidity level: {weatherData.main.humidity}
+                                    Humidity level: {weatherData.main.humidity}%
                                 </h1>
                             )}
                             {weatherData?.wind?.speed && (
                                 <h1 className="card-title text-5xl">
-                                    Wind Speed: {weatherData.wind.speed}
+                                    Wind Speed: {displayWindSpeed} {isFahrenheit ? 'KPH' : 'MPH'}
                                 </h1>
                             )}
                             {weatherData?.weather?.[0]?.main && (

@@ -8,6 +8,16 @@ export function farenheitToCelsius(temp, type) {
     }
 }
 
-export function handleCheckBoxChange(setIsFahrenheit) {
+export function mphToKph(speed, type) {
+    if(type === 'KPH') {
+        return (speed * 1.60934).toFixed(0);
+    }else {
+        return (speed / 1.60934).toFixed(0);
+    }
+}
+
+export function handleCheckBoxChange(setIsFahrenheit, setIsDark) {
         setIsFahrenheit(prev => !prev);
+        setIsDark(prev => !prev);
+
 }
