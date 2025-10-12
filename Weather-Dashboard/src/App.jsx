@@ -115,7 +115,7 @@ function App() {
                     </svg>
         </label>*/}
 
-      <CurrentDay
+      {isLoading? <div className="skeleton h-32 w-32"></div>: <CurrentDay
         isFahrenheit={isFahrenheit}
         coordinates={coordinates}
         city={city}
@@ -124,7 +124,7 @@ function App() {
         setDt={setDt}
         weatherData={weatherData}
         isDark={isDark}
-      />
+      />}
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
         <input type="checkbox"  onChange={()=>handleCheckBoxChange(setIsFahrenheit, setIsDark)} className="theme-controller" value="light" />
@@ -160,13 +160,13 @@ function App() {
         weatherData={weatherData}
       />
 
-      <FutureDays
+      {!futureWeatherData ? null: <FutureDays
         isFahrenheit={isFahrenheit}
         coordinates={coordinates}
         city={city}
         loading={isLoading}
         futureWeatherData={futureWeatherData}
-      />
+      />}
     </>
   )
 }

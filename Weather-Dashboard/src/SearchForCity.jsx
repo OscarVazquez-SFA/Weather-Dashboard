@@ -20,6 +20,7 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         //console.log(city);
         if (!city) return;
         
+        setIsLoading(true);
         const getCoordinates = async () => {
             try {
                 const dataFromGeocode = await AppServices(city, api_key);

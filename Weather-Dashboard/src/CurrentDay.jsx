@@ -82,22 +82,22 @@ export default function CurrentDay({ isFahrenheit, toggleTemp, coordinates, city
                                 </h1>
                             )}
                             {weatherData?.main?.temp && (
-                                <h1 className="card-title text-5xl">
+                                <h1 className={`card-title text-5xl ${isDark ? "text-blue-500" : "text-purple-500"}`}>
                                     Current Temp: {displayTemp}° {isFahrenheit ? 'C' : 'F'}
                                 </h1>
                             )}
                             {weatherData?.main?.humidity && (
-                                <h1 className="card-title text-5xl">
+                                <h1 className={`card-title text-5xl ${isDark ? "text-blue-500" : "text-purple-500"}`}>
                                     Humidity level: {weatherData.main.humidity}%
                                 </h1>
                             )}
                             {weatherData?.wind?.speed && (
-                                <h1 className="card-title text-5xl">
+                                <h1 className={`card-title text-5xl ${isDark ? "text-blue-500" : "text-purple-500"}`}>
                                     Wind Speed: {displayWindSpeed} {isFahrenheit ? 'KPH' : 'MPH'}
                                 </h1>
                             )}
                             {weatherData?.weather?.[0]?.main && (
-                                <h1 className="card-title text-5xl">
+                                <h1 className={`card-title text-5xl ${isDark ? "text-blue-500" : "text-purple-500"}`}>
                                     Weather Description: {weatherData.weather[0].main}
                                 </h1>
                             )}
