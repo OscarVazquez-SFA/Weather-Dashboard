@@ -6,7 +6,7 @@ import CurrentDay from './CurrentDay.jsx'
 import FutureDays from './FutureDays.jsx'
 import SearchForCity from './SearchForCity.jsx'
 import AppServices from './API services/AppService.jsx'
-import {handleCheckBoxChange} from "./Helper Functions/helperFunctions.jsx";
+import { handleCheckBoxChange } from "./Helper Functions/helperFunctions.jsx";
 import React from 'react'
 
 function App() {
@@ -14,21 +14,21 @@ function App() {
   /*
   since both child components need lat and lon parameters to fetch the weather data, we can define them here in the App component
   and pass them down as props to the child components.
-  */  
-    const [weatherData, setWeatherData] = useState(null);
-    const [futureWeatherData, setFutureWeatherData] = useState(null);
-    //const [farenheitType, setFarenheitType] = React.useState(false);
-    const [isDark, setIsDark] = React.useState(true);
+  */
+  const [weatherData, setWeatherData] = useState(null);
+  const [futureWeatherData, setFutureWeatherData] = useState(null);
+  //const [farenheitType, setFarenheitType] = React.useState(false);
+  const [isDark, setIsDark] = React.useState(true);
 
   // best rule of thumb, keep state as high as possible in the component tree
   const [dt, setDt] = useState(0);
-  
+
   const [city, setCity] = useState("");
 
   // make sure to display a loading state while the data is being fetched
   const [coordinates, setCoordinates] = useState({
-    lat: 0, 
-    lon: 0, 
+    lat: 0,
+    lon: 0,
   });
   // state for search input
   //const [searchInput, setSearchInput] = useState("");
@@ -42,7 +42,7 @@ function App() {
   */
   const [isLoading, setIsLoading] = useState(true);
   //use effect here to fetch the longitude and latitude of a city 
-
+  const [userSubmitted, setUserSubmitted] = useState(false);
   /*
   useEffect(()=>{
     if(!city) return;
@@ -72,20 +72,21 @@ function App() {
   useEffect(() => {
     //console.log("Coordinates updated:", coordinates);
     //console.log("City updated:", city);
-    
+
   }, [coordinates]);
 
   //console.log(weatherData)
 
-  function toggleContrast(event){
+  function toggleContrast(event) {
     event.preventDefault();
     setIsDark(prevIsDark => !prevIsDark);
   }
-  console.log(isDark);
+
+  console.log(userSubmitted);
 
   return (
     <>
-    {/*  <label className="flex cursor-pointer gap-2 z-10 justify-end items-center p-4">
+      {/*  <label className="flex cursor-pointer gap-2 z-10 justify-end items-center p-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -115,19 +116,23 @@ function App() {
                     </svg>
         </label>*/}
 
-      {isLoading? <div className="skeleton h-32 w-32"></div>: <CurrentDay
-        isFahrenheit={isFahrenheit}
-        coordinates={coordinates}
-        city={city}
-        loading={isLoading}
-        dt={dt}
-        setDt={setDt}
-        weatherData={weatherData}
-        isDark={isDark}
-      />}
+      {!userSubmitted ? <p>hello world</p> :
+        isLoading ? <div className="skeleton h-100 w-100"></div> :
+          weatherData ?
+            <CurrentDay
+              isFahrenheit={isFahrenheit}
+              coordinates={coordinates}
+              city={city}
+              loading={isLoading}
+              dt={dt}
+              setDt={setDt}
+              weatherData={weatherData}
+              isDark={isDark}
+            /> : <p>not working</p>}
+
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
-        <input type="checkbox"  onChange={()=>handleCheckBoxChange(setIsFahrenheit, setIsDark)} className="theme-controller" value="light" />
+        <input type="checkbox" onChange={() => handleCheckBoxChange(setIsFahrenheit, setIsDark)} className="theme-controller" value="light" />
 
         {/* sun icon */}
         <svg
@@ -158,9 +163,10 @@ function App() {
         setWeatherData={setWeatherData}
         setFutureWeatherData={setFutureWeatherData}
         weatherData={weatherData}
+        setUserSubmitted={setUserSubmitted}
       />
 
-      {!futureWeatherData ? null: <FutureDays
+      {!futureWeatherData ? null : <FutureDays
         isFahrenheit={isFahrenheit}
         coordinates={coordinates}
         city={city}

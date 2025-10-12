@@ -4,7 +4,7 @@ import AppServices from "./API services/AppService.jsx";
 import FutureDaysServices from "./API services/FutureDaysServices.jsx";
 
 
-export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData, setFutureWeatherData }) {
+export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData, setFutureWeatherData, setUserSubmitted}) {
     const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // this component will try and handle the search for a valid city
     // will also attempt to fetch the weather data for that city
@@ -20,6 +20,7 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         //console.log(city);
         if (!city) return;
         
+        setUserSubmitted(true);
         setIsLoading(true);
         const getCoordinates = async () => {
             try {
