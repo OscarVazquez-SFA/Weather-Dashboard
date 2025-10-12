@@ -16,8 +16,9 @@ export function mphToKph(speed, type) {
     }
 }
 
-export function handleCheckBoxChange(setIsFahrenheit, setIsDark) {
-        setIsFahrenheit(prev => !prev);
+export function handleCheckBoxChange(setIsDark) {
         setIsDark(prev => !prev);
-
+}
+export function handleCheckBoxChangeTemp(setIsFahrenheit) {
+    setIsFahrenheit(prev => !prev);
 }
