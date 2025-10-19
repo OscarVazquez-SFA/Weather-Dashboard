@@ -83,9 +83,15 @@ function App() {
     setIsDark(prevIsDark => !prevIsDark);
   }
 
-  console.log(userSubmitted);
+  function testNoon(string){
+    return string?.includes("12:00:00");
+  }
 
-  return (
+  const filteredList = futureWeatherData?.list.filter(item => testNoon(item.dt_txt));
+  console.log(filteredList);
+  //console.log(futureWeatherData);
+
+  return (  
     <>
       <label className="flex cursor-pointer gap-2">
         <span className="label-text">C</span>
@@ -150,6 +156,7 @@ function App() {
         city={city}
         loading={isLoading}
         futureWeatherData={futureWeatherData}
+        filteredList={filteredList}
       />}
     </>
   )
