@@ -9,6 +9,7 @@ import AppServices from './API services/AppService.jsx'
 import { handleCheckBoxChange } from "./Helper Functions/helperFunctions.jsx";
 import React from 'react'
 import { handleCheckBoxChangeTemp } from "./Helper Functions/helperFunctions.jsx";
+import PrevSearchedCity from './PrevSearchedCity.jsx'
 
 function App() {
   const api_key = import.meta.env.VITE_WEATHER_API_KEY
@@ -83,7 +84,7 @@ function App() {
     setIsDark(prevIsDark => !prevIsDark);
   }
 
-  function testNoon(string){
+  function testNoon(string) {
     return string?.includes("12:00:00");
   }
 
@@ -91,11 +92,11 @@ function App() {
   console.log(filteredList);
   //console.log(futureWeatherData);
 
-  return (  
+  return (
     <>
       <label className="flex cursor-pointer gap-2">
         <span className="label-text">C</span>
-        <input type="checkbox" onClick={()=>handleCheckBoxChangeTemp(setIsFahrenheit)} className="toggle" />
+        <input type="checkbox" onClick={() => handleCheckBoxChangeTemp(setIsFahrenheit)} className="toggle" />
         <span className="label-text">F</span>
       </label>
 
@@ -113,6 +114,10 @@ function App() {
               weatherData={weatherData}
               isDark={isDark}
             /> : <p>not working</p>}
+
+      {/* <PrevSearchedCity
+        city={city}
+      /> */}
 
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}

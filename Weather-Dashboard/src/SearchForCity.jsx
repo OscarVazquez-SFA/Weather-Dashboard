@@ -15,6 +15,12 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
     // const lastSearchedCity = localStorage.getItem("lastSearchedCity");
     // console.log(lastSearchedCity); // will log the last searched city
     // save last city in local storage so that when user wants to see the weather for that city again, it will be available for user 
+
+
+    // when searching/submitting for a city, make sure that successful information is received from the API before setting/saving that 
+    // city in local storage (imagine it gets wrong info, that means we will display wrong info/errors to the user)
+    // since local storage is seen in all components and not tied down to one, then it can be accessed in any component. 
+
     async function handleSubmit(event) {
         event.preventDefault();
         //console.log(city);
