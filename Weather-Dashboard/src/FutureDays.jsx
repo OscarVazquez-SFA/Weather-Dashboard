@@ -34,8 +34,8 @@ export default function FutureDays({ isFahrenheit, toggleTemp, futureWeatherData
     // const api_call = `http://api.openweathermap.org/geo/1.0/direct?q=Dallas&limit={limit}&appid=${api_key}`
     const displayedListMax = filteredList.map(item => item.main.temp_max);
     const displayedListMin = filteredList.map(item => item.main.temp_min);
-    console.log("This is the max temp at noon for the upcoming days: ", displayedListMax);
-    console.log("This is the min temp at noon for the upcoming days: ", displayedListMin);
+    //console.log("This is the max temp at noon for the upcoming days: ", displayedListMax);
+    //console.log("This is the min temp at noon for the upcoming days: ", displayedListMin);
 
 
     // let displayMaxTemp =  isFahrenheit ? farenheitToCelsius(filteredList, 'C') : futureWeatherData?.list[0]?.main?.temp_max.toFixed(0);

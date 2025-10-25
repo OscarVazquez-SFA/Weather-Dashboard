@@ -4,7 +4,7 @@ import AppServices from "./API services/AppService.jsx";
 import FutureDaysServices from "./API services/FutureDaysServices.jsx";
 
 
-export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData, setFutureWeatherData, setUserSubmitted}) {
+export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData, setFutureWeatherData, setUserSubmitted, recentCity, setRecentCity }) {
     const api_key = import.meta.env.VITE_WEATHER_API_KEY
     // this component will try and handle the search for a valid city
     // will also attempt to fetch the weather data for that city
@@ -65,6 +65,23 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         //console.log("Future Info:", futureInfo);
         setWeatherData(currentInfo);
         //console.log(currentInfo);
+
+        const cityArray = JSON.parse(localStorage.getItem("lastSearchedCity")) || [];
+        const newCity = city.trim();
+
+        
+        const updatedCityArray = [...cityArray, newCity];
+
+
+
+
+        localStorage.setItem("lastSearchedCity", JSON.stringify(updatedCityArray));
+        setRecentCity(updatedCityArray); // Update state to re-render
+
+        console.log("Recent City in SearchForCity:", recentCity);
+        console.log("New City:", newCity);
+        console.log(updatedCityArray);
+
         setIsLoading(false);
     }
 

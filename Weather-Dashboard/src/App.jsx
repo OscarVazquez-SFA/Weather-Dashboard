@@ -13,71 +13,38 @@ import PrevSearchedCity from './PrevSearchedCity.jsx'
 
 function App() {
   const api_key = import.meta.env.VITE_WEATHER_API_KEY
-  /*
-  since both child components need lat and lon parameters to fetch the weather data, we can define them here in the App component
-  and pass them down as props to the child components.
-  */
+  
   const [weatherData, setWeatherData] = useState(null);
   const [futureWeatherData, setFutureWeatherData] = useState(null);
-  //const [farenheitType, setFarenheitType] = React.useState(false);
   const [isDark, setIsDark] = React.useState(true);
 
-  // best rule of thumb, keep state as high as possible in the component tree
   const [dt, setDt] = useState(0);
 
   const [city, setCity] = useState("");
 
-  // make sure to display a loading state while the data is being fetched
   const [coordinates, setCoordinates] = useState({
     lat: 0,
     lon: 0,
   });
-  // state for search input
-  //const [searchInput, setSearchInput] = useState("");
-
-  // create a state to control the temperature unit (Fahrenheit/Celsius)
+  
   const [isFahrenheit, setIsFahrenheit] = useState(true);
 
-  //state to control the loading state (dont forget to add the loading/skeleton UI thing from daisyUI) 
-  /* this is the loading state that will be used to display a skeleton UI while the data is being fetched
-  <div className="skeleton h-32 w-32"></div>
-  */
   const [isLoading, setIsLoading] = useState(true);
-  //use effect here to fetch the longitude and latitude of a city 
   const [userSubmitted, setUserSubmitted] = useState(false);
-  /*
-  useEffect(()=>{
-    if(!city) return;
-    const getCoordinates = async () => {
-      try{
-        const dataFromCurrentAPI = await AppServices(city, api_key);
-        if(dataFromCurrentAPI.length === 0){
-          console.error("No data found for the specified city", city);
-          setIsLoading(false);
-          return;
-      }
-      setCoordinates({
-        lat: dataFromCurrentAPI[0].lat,
-        lon: dataFromCurrentAPI[0].lon
-      });
-      setIsLoading(false);
-      }catch(error){
-        console.error(err);
-        setIsLoading(false);
-      }
-  };
-    getCoordinates();
-}, [city]);
-
-*/
+  const [recentCity, setRecentCity] = useState("");
+ 
 
   useEffect(() => {
-    //console.log("Coordinates updated:", coordinates);
-    //console.log("City updated:", city);
+    const lastSearchedCity = localStorage.getItem("lastSearchedCity");
+    setRecentCity(lastSearchedCity);
+  }, []);
 
-  }, [coordinates]);
 
-  //console.log(weatherData)
+  useEffect(() => {
+    const lastSearchedCity = localStorage.getItem("lastSearchedCity");
+    // this useEffect will act as componentDidMount to set the last searched city when the app loads
+    // add a way for the user to see weather for ALL cities within local storage
+  }, []);
 
   function toggleContrast(event) {
     event.preventDefault();
@@ -89,8 +56,7 @@ function App() {
   }
 
   const filteredList = futureWeatherData?.list.filter(item => testNoon(item.dt_txt));
-  console.log(filteredList);
-  //console.log(futureWeatherData);
+  //console.log(filteredList);
 
   return (
     <>
@@ -100,6 +66,7 @@ function App() {
         <span className="label-text">F</span>
       </label>
 
+      <h1>{recentCity}</h1>
 
       {!userSubmitted ? <p>hello world</p> :
         isLoading ? <div className="skeleton h-100 w-100"></div> :
@@ -153,6 +120,8 @@ function App() {
         setFutureWeatherData={setFutureWeatherData}
         weatherData={weatherData}
         setUserSubmitted={setUserSubmitted}
+        recentCity={recentCity}
+        setRecentCity={setRecentCity}
       />
 
       {!futureWeatherData ? null : <FutureDays
