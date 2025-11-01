@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 
-export default function PrevSearchedCity(city) {
+export default function PrevSearchedCity() {
 
-    const savedCity = localStorage.getItem("lastSearchedCity")
-
-    [prevCity, setPrevCity] = useState(savedCity || "");
-
-    
-
+        const cityArray = JSON.parse(localStorage.getItem("lastSearchedCity")) || [];
+        
+        
 
     return (
-        <div>PrevSearchedCity</div>
+        <div className="prev-searched-city">
+            <h2>Previous Searched City:</h2>
+            <p>{cityArray}</p>
+        </div>
     )
 }

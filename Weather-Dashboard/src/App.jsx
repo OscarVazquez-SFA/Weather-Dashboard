@@ -10,10 +10,12 @@ import { handleCheckBoxChange } from "./Helper Functions/helperFunctions.jsx";
 import React from 'react'
 import { handleCheckBoxChangeTemp } from "./Helper Functions/helperFunctions.jsx";
 import PrevSearchedCity from './PrevSearchedCity.jsx'
+import CurrentDayServices from './API services/CurrentDayServices.jsx'
+import FutureDaysServices from './API services/FutureDaysServices.jsx'
 
 function App() {
   const api_key = import.meta.env.VITE_WEATHER_API_KEY
-  
+
   const [weatherData, setWeatherData] = useState(null);
   const [futureWeatherData, setFutureWeatherData] = useState(null);
   const [isDark, setIsDark] = React.useState(true);
@@ -26,25 +28,68 @@ function App() {
     lat: 0,
     lon: 0,
   });
-  
+
   const [isFahrenheit, setIsFahrenheit] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [userSubmitted, setUserSubmitted] = useState(false);
   const [recentCity, setRecentCity] = useState("");
- 
+  const [mostRecentCitytoUseAPI, setMostRecentCitytoUseAPI] = useState("");
+
 
   useEffect(() => {
     const lastSearchedCity = localStorage.getItem("lastSearchedCity");
     setRecentCity(lastSearchedCity);
+    const mostRecentCity = JSON.parse(localStorage.getItem("lastSearchedCity"));
+    if (mostRecentCity && mostRecentCity.length > 0) {
+      const cityToUse = mostRecentCity[mostRecentCity.length - 1];
+      //console.log("Most recent city to use from local storage: ", cityToUse);
+      setMostRecentCitytoUseAPI(cityToUse);
+      setCity(cityToUse);
+    }
   }, []);
 
 
   useEffect(() => {
-    const lastSearchedCity = localStorage.getItem("lastSearchedCity");
+    if (!mostRecentCitytoUseAPI) return;
+    async function handleMostRecentCity() {
+      setIsLoading(true);
+      try {
+        const currentInfo = await AppServices(mostRecentCitytoUseAPI, api_key);
+        if (currentInfo.length === 0) {
+          console.error("No data found for the specified city", mostRecentCitytoUseAPI);
+          setIsLoading(false);
+          return;
+        }
+
+        const obj = {
+          lat: currentInfo[0].lat,
+          lon: currentInfo[0].lon
+        };
+        setCoordinates(obj);
+        console.log("Coordinates from most recent city:", obj);
+
+        const weatherInfo = await CurrentDayServices(obj.lat, obj.lon, api_key, isFahrenheit);
+        setWeatherData(weatherInfo);
+        console.log("Current Info from most recent city: ", weatherInfo);
+
+        const futureInfo = await FutureDaysServices(obj.lat, obj.lon, api_key, isFahrenheit);
+        setFutureWeatherData(futureInfo);
+        console.log("Future Info from most recent city:", futureInfo);
+
+      } catch (error) {
+        console.error("Error handling most recent city:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    handleMostRecentCity();
+
+    //console.log("UseEffect ran. Stuff in Local Storage: ", lastSearchedCity);
     // this useEffect will act as componentDidMount to set the last searched city when the app loads
     // add a way for the user to see weather for ALL cities within local storage
-  }, []);
+  }, [mostRecentCitytoUseAPI]);
 
   function toggleContrast(event) {
     event.preventDefault();
@@ -68,8 +113,7 @@ function App() {
 
       <h1>{recentCity}</h1>
 
-      {!userSubmitted ? <p>hello world</p> :
-        isLoading ? <div className="skeleton h-100 w-100"></div> :
+      {
           weatherData ?
             <CurrentDay
               isFahrenheit={isFahrenheit}
@@ -82,9 +126,8 @@ function App() {
               isDark={isDark}
             /> : <p>not working</p>}
 
-      {/* <PrevSearchedCity
-        city={city}
-      /> */}
+      <PrevSearchedCity
+      /> 
 
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}

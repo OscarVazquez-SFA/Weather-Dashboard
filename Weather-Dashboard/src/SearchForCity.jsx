@@ -26,7 +26,6 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         //console.log(city);
         if (!city) return;
         
-        setUserSubmitted(true);
         setIsLoading(true);
         const getCoordinates = async () => {
             try {
@@ -57,30 +56,33 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         
         const test = await getCoordinates();
         //console.log(coordinates);
-       // console.log(test);
+        console.log(test);
         
         const currentInfo = await CurrentDayServices(test.lat, test.lon, api_key, isFahrenheit);
         const futureInfo = await FutureDaysServices(test.lat, test.lon, api_key, isFahrenheit);
         setFutureWeatherData(futureInfo);
-        //console.log("Future Info:", futureInfo);
+        console.log("Future Info:", futureInfo);
         setWeatherData(currentInfo);
-        //console.log(currentInfo);
+        console.log("current Info: ", currentInfo);
 
         const cityArray = JSON.parse(localStorage.getItem("lastSearchedCity")) || [];
         const newCity = city.trim();
+        let updatedCityArray;
 
-        
-        const updatedCityArray = [...cityArray, newCity];
+        // do a check here 
+        if(cityArray.length === 6){
+            const trimmedArray = cityArray.slice(1); // remove the oldest entry
+            updatedCityArray = [...trimmedArray, newCity];
+        }
+        else{
+            updatedCityArray = [...cityArray, newCity];
+        }
 
 
 
 
         localStorage.setItem("lastSearchedCity", JSON.stringify(updatedCityArray));
-        setRecentCity(updatedCityArray); // Update state to re-render
-
-        console.log("Recent City in SearchForCity:", recentCity);
-        console.log("New City:", newCity);
-        console.log(updatedCityArray);
+        //setRecentCity(updatedCityArray); // Update state to re-render
 
         setIsLoading(false);
     }
