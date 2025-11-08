@@ -25,12 +25,12 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         event.preventDefault();
         //console.log(city);
         if (!city) return;
-        
+
         setIsLoading(true);
         const getCoordinates = async () => {
             try {
                 const dataFromGeocode = await AppServices(city, api_key);
-                
+
                 //console.log(dataFromGeocode[0].lat, dataFromGeocode[0].lon);
                 if (dataFromGeocode.length === 0) {
                     console.error("No data found for the specified city", city);
@@ -43,21 +43,21 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
                     lon: dataFromGeocode[0].lon
                 });
                 */
-               const obj = {
-                lat: dataFromGeocode[0].lat,
-                lon: dataFromGeocode[0].lon
-               }
+                const obj = {
+                    lat: dataFromGeocode[0].lat,
+                    lon: dataFromGeocode[0].lon
+                }
                 return obj
             } catch (error) {
                 console.error(error);
                 setIsLoading(false);
             }
         };
-        
+
         const test = await getCoordinates();
         //console.log(coordinates);
         console.log(test);
-        
+
         const currentInfo = await CurrentDayServices(test.lat, test.lon, api_key, isFahrenheit);
         const futureInfo = await FutureDaysServices(test.lat, test.lon, api_key, isFahrenheit);
         setFutureWeatherData(futureInfo);
@@ -70,11 +70,11 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
         let updatedCityArray;
 
         // do a check here 
-        if(cityArray.length === 6){
+        if (cityArray.length === 6) {
             const trimmedArray = cityArray.slice(1); // remove the oldest entry
             updatedCityArray = [...trimmedArray, newCity];
         }
-        else{
+        else {
             updatedCityArray = [...cityArray, newCity];
         }
 
@@ -89,11 +89,20 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                <input onChange={(event) => { setCity(event.target.value) }} value={city} type="text" placeholder="Type here" className="input" />
-                <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">Submit</button>
+            <form
+                onSubmit={handleSubmit}
+                className="flex justify-center items-center gap-2 mt-4"
+            >
+                <input
+                    onChange={(event) => setCity(event.target.value)}
+                    value={city}
+                    type="text"
+                    placeholder="Type here"
+                    className="input input-bordered w-64"
+                />
+                <button className="btn btn-neutral">Submit</button>
             </form>
         </>
+    );
 
-    )
 }
