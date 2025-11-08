@@ -19,7 +19,7 @@ export default function PrevSearchedCity({ handlePrevCityClick }) {
             </button>
           ))
         ) : (
-          <p className="text-gray-500">No previously searched cities yet. Give it a try!</p>
+          <p className="text-gray-500">Your previously searched cities will appear here once you've given us a shot!</p>
         )}
       </div>
     </div>

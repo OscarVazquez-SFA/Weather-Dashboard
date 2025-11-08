@@ -194,7 +194,9 @@ function App() {
             setDt={setDt}
             weatherData={weatherData}
             isDark={isDark}
-          /> : <p>not working</p>}
+          /> : <nav className="flex justify-center items-center mt-8 mb-12">
+            <p className="text-gray-500">Welcome to your very own Weather Dashboard. Please search for a city to start!</p></nav>
+      }
 
       <PrevSearchedCity
         handlePrevCityClick={handlePrevCityClick}
