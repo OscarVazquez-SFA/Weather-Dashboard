@@ -67,15 +67,15 @@ function App() {
           lon: currentInfo[0].lon
         };
         setCoordinates(obj);
-        console.log("Coordinates from most recent city:", obj);
+       // console.log("Coordinates from most recent city:", obj);
 
         const weatherInfo = await CurrentDayServices(obj.lat, obj.lon, api_key, isFahrenheit);
         setWeatherData(weatherInfo);
-        console.log("Current Info from most recent city: ", weatherInfo);
+       // console.log("Current Info from most recent city: ", weatherInfo);
 
         const futureInfo = await FutureDaysServices(obj.lat, obj.lon, api_key, isFahrenheit);
         setFutureWeatherData(futureInfo);
-        console.log("Future Info from most recent city:", futureInfo);
+       // console.log("Future Info from most recent city:", futureInfo);
 
       } catch (error) {
         console.error("Error handling most recent city:", error);
@@ -101,8 +101,44 @@ function App() {
   }
 
   const filteredList = futureWeatherData?.list.filter(item => testNoon(item.dt_txt));
-  //console.log(filteredList);
+ 
+  const handlePrevCityClick = (city) => {
+    if (!city) return;
+    async function handleMostRecentCity() {
+      setIsLoading(true);
+      try {
+        const currentInfo = await AppServices(city, api_key);
+        if (currentInfo.length === 0) {
+          console.error("No data found for the specified city", city);
+          setIsLoading(false);
+          return;
+        }
 
+        const obj = {
+          lat: currentInfo[0].lat,
+          lon: currentInfo[0].lon
+        };
+        setCoordinates(obj);
+       // console.log("Coordinates from most recent city:", obj);
+
+        const weatherInfo = await CurrentDayServices(obj.lat, obj.lon, api_key, isFahrenheit);
+        setWeatherData(weatherInfo);
+       // console.log("Current Info from most recent city: ", weatherInfo);
+
+        const futureInfo = await FutureDaysServices(obj.lat, obj.lon, api_key, isFahrenheit);
+        setFutureWeatherData(futureInfo);
+       // console.log("Future Info from most recent city:", futureInfo);
+
+      } catch (error) {
+        console.error("Error handling most recent city:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    handleMostRecentCity();
+  }
+  
   return (
     <>
       <label className="flex cursor-pointer gap-2">
@@ -110,8 +146,6 @@ function App() {
         <input type="checkbox" onClick={() => handleCheckBoxChangeTemp(setIsFahrenheit)} className="toggle" />
         <span className="label-text">F</span>
       </label>
-
-      <h1>{recentCity}</h1>
 
       {
           weatherData ?
@@ -127,6 +161,7 @@ function App() {
             /> : <p>not working</p>}
 
       <PrevSearchedCity
+      handlePrevCityClick={handlePrevCityClick}
       /> 
 
       <label className="swap swap-rotate">
@@ -175,6 +210,8 @@ function App() {
         futureWeatherData={futureWeatherData}
         filteredList={filteredList}
       />}
+
+      
     </>
   )
 }
