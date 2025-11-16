@@ -4,26 +4,14 @@ import AppServices from "./API services/AppService.jsx";
 import FutureDaysServices from "./API services/FutureDaysServices.jsx";
 
 
-export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData, setFutureWeatherData, setUserSubmitted, recentCity, setRecentCity }) {
+export default function SearchForCity({ city, setCity, coordinates, isFahrenheit, setCoordinates, setIsLoading, setWeatherData, weatherData, setFutureWeatherData, setUserSubmitted, recentCity, setRecentCity, setErrorMessage }) {
     const api_key = import.meta.env.VITE_WEATHER_API_KEY
-    // this component will try and handle the search for a valid city
-    // will also attempt to fetch the weather data for that city
-    // potentially loading state here rather than using the loading state in the App component
 
-    // local storage to save the searched city
-    // localStorage.setItem("lastSearchedCity", city);
-    // const lastSearchedCity = localStorage.getItem("lastSearchedCity");
-    // console.log(lastSearchedCity); // will log the last searched city
-    // save last city in local storage so that when user wants to see the weather for that city again, it will be available for user 
-
-
-    // when searching/submitting for a city, make sure that successful information is received from the API before setting/saving that 
-    // city in local storage (imagine it gets wrong info, that means we will display wrong info/errors to the user)
-    // since local storage is seen in all components and not tied down to one, then it can be accessed in any component. 
-
+    
     async function handleSubmit(event) {
         event.preventDefault();
         //console.log(city);
+        setErrorMessage("");
         if (!city) return;
 
         setIsLoading(true);
@@ -33,7 +21,7 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
 
                 //console.log(dataFromGeocode[0].lat, dataFromGeocode[0].lon);
                 if (dataFromGeocode.length === 0) {
-                    console.error("No data found for the specified city", city);
+                    setErrorMessage(`No results found for "${city}". Please try another city.`);
                     setIsLoading(false);
                     return;
                 }
@@ -50,6 +38,8 @@ export default function SearchForCity({ city, setCity, coordinates, isFahrenheit
                 return obj
             } catch (error) {
                 console.error(error);
+                setErrorMessage("An unexpected error occurred. Please try again.");
+
                 setIsLoading(false);
             }
         };
