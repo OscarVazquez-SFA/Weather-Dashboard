@@ -1,18 +1,180 @@
-import { useState } from 'react'
+import { useState, useEffect, use } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import CurrentDay from './CurrentDay.jsx'
+import FutureDays from './FutureDays.jsx'
+import SearchForCity from './SearchForCity.jsx'
+import AppServices from './API services/AppService.jsx'
+import { handleCheckBoxChange } from "./Helper Functions/helperFunctions.jsx";
+import React from 'react'
+import { handleCheckBoxChangeTemp } from "./Helper Functions/helperFunctions.jsx";
+import PrevSearchedCity from './PrevSearchedCity.jsx'
+import CurrentDayServices from './API services/CurrentDayServices.jsx'
+import FutureDaysServices from './API services/FutureDaysServices.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const api_key = import.meta.env.VITE_WEATHER_API_KEY
+
+  const [weatherData, setWeatherData] = useState(null);
+  const [futureWeatherData, setFutureWeatherData] = useState(null);
+  const [isDark, setIsDark] = React.useState(true);
+
+  const [dt, setDt] = useState(0);
+
+  const [city, setCity] = useState("");
+
+  const [coordinates, setCoordinates] = useState({
+    lat: 0,
+    lon: 0,
+  });
+
+  const [isFahrenheit, setIsFahrenheit] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [userSubmitted, setUserSubmitted] = useState(false);
+  const [recentCity, setRecentCity] = useState("");
+  const [mostRecentCitytoUseAPI, setMostRecentCitytoUseAPI] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+
+  useEffect(() => {
+    const lastSearchedCity = localStorage.getItem("lastSearchedCity");
+    setRecentCity(lastSearchedCity);
+    const mostRecentCity = JSON.parse(localStorage.getItem("lastSearchedCity"));
+    if (mostRecentCity && mostRecentCity.length > 0) {
+      const cityToUse = mostRecentCity[mostRecentCity.length - 1];
+      //console.log("Most recent city to use from local storage: ", cityToUse);
+      setMostRecentCitytoUseAPI(cityToUse);
+      setCity(cityToUse);
+    }
+  }, []);
+
+
+  useEffect(() => {
+    if (!mostRecentCitytoUseAPI) return;
+    async function handleMostRecentCity() {
+      setIsLoading(true);
+      try {
+        const currentInfo = await AppServices(mostRecentCitytoUseAPI, api_key);
+        if (currentInfo.length === 0) {
+          console.error("No data found for the specified city", mostRecentCitytoUseAPI);
+          setIsLoading(false);
+          return;
+        }
+
+        const obj = {
+          lat: currentInfo[0].lat,
+          lon: currentInfo[0].lon
+        };
+        setCoordinates(obj);
+        // console.log("Coordinates from most recent city:", obj);
+
+        const weatherInfo = await CurrentDayServices(obj.lat, obj.lon, api_key, isFahrenheit);
+        setWeatherData(weatherInfo);
+        // console.log("Current Info from most recent city: ", weatherInfo);
+
+        const futureInfo = await FutureDaysServices(obj.lat, obj.lon, api_key, isFahrenheit);
+        setFutureWeatherData(futureInfo);
+        // console.log("Future Info from most recent city:", futureInfo);
+
+      } catch (error) {
+        console.error("Error handling most recent city:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    handleMostRecentCity();
+
+    //console.log("UseEffect ran. Stuff in Local Storage: ", lastSearchedCity);
+    // this useEffect will act as componentDidMount to set the last searched city when the app loads
+    // add a way for the user to see weather for ALL cities within local storage
+  }, [mostRecentCitytoUseAPI]);
+
+  function toggleContrast(event) {
+    event.preventDefault();
+    setIsDark(prevIsDark => !prevIsDark);
+  }
+
+  function testNoon(string) {
+    return string?.includes("12:00:00");
+  }
+
+  const filteredList = futureWeatherData?.list.filter(item => testNoon(item.dt_txt));
+
+  const handlePrevCityClick = (city) => {
+    if (!city) return;
+    async function handleMostRecentCity() {
+      setIsLoading(true);
+      try {
+        const currentInfo = await AppServices(city, api_key);
+        if (currentInfo.length === 0) {
+          console.error("No data found for the specified city", city);
+          setIsLoading(false);
+          return;
+        }
+
+        const obj = {
+          lat: currentInfo[0].lat,
+          lon: currentInfo[0].lon
+        };
+        setCoordinates(obj);
+        // console.log("Coordinates from most recent city:", obj);
+
+        const weatherInfo = await CurrentDayServices(obj.lat, obj.lon, api_key, isFahrenheit);
+        setWeatherData(weatherInfo);
+        // console.log("Current Info from most recent city: ", weatherInfo);
+
+        const futureInfo = await FutureDaysServices(obj.lat, obj.lon, api_key, isFahrenheit);
+        setFutureWeatherData(futureInfo);
+        // console.log("Future Info from most recent city:", futureInfo);
+
+      } catch (error) {
+        console.error("Error handling most recent city:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    handleMostRecentCity();
+  }
 
   return (
     <>
-      <CurrentDay />
+      {errorMessage && <div role="alert" className="alert alert-error">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{errorMessage}</span>
+      </div>
+      }
+      <SearchForCity
+        city={city}
+        setCity={setCity}
+        coordinates={coordinates}
+        isFahrenheit={isFahrenheit}
+        setIsLoading={setIsLoading}
+        setCoordinates={setCoordinates}
+        setWeatherData={setWeatherData}
+        setFutureWeatherData={setFutureWeatherData}
+        weatherData={weatherData}
+        setUserSubmitted={setUserSubmitted}
+        recentCity={recentCity}
+        setRecentCity={setRecentCity}
+        setErrorMessage={setErrorMessage}
+      />
+
+
+      <label className="flex cursor-pointer gap-2">
+        <span className="label-text">C</span>
+        <input type="checkbox" onClick={() => handleCheckBoxChangeTemp(setIsFahrenheit)} className="toggle" />
+        <span className="label-text">F</span>
+      </label>
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
-        <input type="checkbox" className="theme-controller" value="light" />
+        <input type="checkbox" onChange={() => handleCheckBoxChange(setIsDark)} className="theme-controller" value="light" />
 
         {/* sun icon */}
         <svg
@@ -32,6 +194,35 @@ function App() {
             d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
         </svg>
       </label>
+      {
+        weatherData ?
+          <CurrentDay
+            isFahrenheit={isFahrenheit}
+            coordinates={coordinates}
+            city={city}
+            loading={isLoading}
+            dt={dt}
+            setDt={setDt}
+            weatherData={weatherData}
+            isDark={isDark}
+          /> : <nav className="flex justify-center items-center mt-8 mb-12">
+            <p className="text-gray-500">Welcome to your very own Weather Dashboard. Please search for a city to start!</p></nav>
+      }
+
+      <PrevSearchedCity
+        handlePrevCityClick={handlePrevCityClick}
+      />
+
+      {!futureWeatherData ? null : <FutureDays
+        isFahrenheit={isFahrenheit}
+        coordinates={coordinates}
+        city={city}
+        loading={isLoading}
+        futureWeatherData={futureWeatherData}
+        filteredList={filteredList}
+      />}
+
+
     </>
   )
 }
